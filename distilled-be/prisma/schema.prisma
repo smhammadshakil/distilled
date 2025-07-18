@@ -1,0 +1,242 @@
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  PARTNER
+  TALENT
+  ADMIN
+}
+
+enum Deactivated {
+  SIGNUP
+  ACTIVE
+  INACTIVE
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum TalentStatus {
+  BENCH
+  ASSIGNED
+}
+
+enum ApplicationStatus {
+  APPLIED
+  REJECTED
+  INTRO_CALL
+  CASE_STUDY_SENT
+  CASE_STUDY_RECEIVED
+  CASE_STUDY_DISCUSSION
+  FINAL_INTERVIEW
+  OFFER_MADE
+  OFFER_ACCEPTED
+  OFFER_REJECTED
+}
+
+enum LeadStatus {
+  LEAD
+  IN_DISCUSSION
+  CONTRACT_SENT
+  CONTRACT_SIGNED
+  REJECTED
+  TERMINATION_OF_CONTRACT
+}
+
+enum ActiveRequestStatus {
+  REQUESTED
+  REJECTED
+  ACCEPTED
+  ACTIVE
+  COMPLETED
+}
+
+model Users {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  password       String
+  userType       UserType
+  linkedIn       String?
+  phoneNumber    String?
+  website        String?
+  shortIntro     String?
+  deactivated    Deactivated
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
+
+  admin          Admins?
+  talent         Talents?
+  partner        Partners?
+}
+
+model Admins {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  fullName  String
+  gender    Gender?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  user      Users     @relation(fields: [userId], references: [id])
+}
+
+model Talents {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  fullName          String
+  gender            Gender?
+  identityInfo      String?
+  address           String?
+  city              String?
+  country           String?
+  yearsOfExperience Int?
+  readinessScore    Float?
+  status            TalentStatus
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  deletedAt         DateTime?
+
+  user              Users     @relation(fields: [userId], references: [id])
+  resumes           Resumes[]
+  experiences       Experiences[]
+  certifications    Certifications[]
+  applications      Applications[]
+  activeRequests    ActiveRequests[]
+}
+
+model Resumes {
+  id        String   @id @default(uuid())
+  talentId  String
+  fileName  String
+  fileUrl   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  talent    Talents   @relation(fields: [talentId], references: [id])
+}
+
+model Experiences {
+  id        String   @id @default(uuid())
+  talentId  String
+  company   String
+  startDate DateTime
+  endDate   DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  talent    Talents   @relation(fields: [talentId], references: [id])
+  skills    Skills[]  @relation("ExperienceSkills")
+  roles     Roles[]   @relation("ExperienceRoles")
+}
+
+model Certifications { 
+  id          String   @id @default(uuid())
+  talentId    String
+  description String
+  fileUrl     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  talent      Talents   @relation(fields: [talentId], references: [id])
+}
+
+model Partners {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  companyName       String
+  contactPersonName String
+  industry          String?
+  preferredTimeZone String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  deletedAt         DateTime?
+
+  user              Users     @relation(fields: [userId], references: [id])
+  leads             Leads[]
+  activeRequests    ActiveRequests[]
+}
+
+model Skills {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  experiences Experiences[] @relation("ExperienceSkills")
+}
+
+model Roles {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  experiences Experiences[] @relation("ExperienceRoles")
+}
+
+model Applications {
+  id                    String            @id @default(uuid())
+  talentId              String
+  notes                 String?
+  startDate             DateTime
+  endDate               DateTime?
+  contractWithDistilled String? // file/URL
+  status                ApplicationStatus
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  deletedAt             DateTime?
+
+  talent                Talents            @relation(fields: [talentId], references: [id])
+}
+
+model Leads {
+  id                    String        @id @default(uuid())
+  partnerId             String
+  note                  String?
+  startDate             DateTime
+  endDate               DateTime?
+  contractWithDistilled String? // file/URL
+  status                LeadStatus
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+  deletedAt             DateTime?
+
+  partner               Partners      @relation(fields: [partnerId], references: [id])
+  activeRequests        ActiveRequests[]
+}
+
+model ActiveRequests {
+  id        String              @id @default(uuid())
+  leadId    String
+  talentId  String
+  partnerId String
+  startDate DateTime
+  endDate   DateTime?
+  status    ActiveRequestStatus
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  deletedAt DateTime?
+
+  lead      Leads                @relation(fields: [leadId], references: [id])
+  talent    Talents              @relation(fields: [talentId], references: [id])
+  partner   Partners             @relation(fields: [partnerId], references: [id])
+}
