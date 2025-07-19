@@ -24,7 +24,7 @@ export class UsersService {
   }
 
   findOne(id: string) {
-    return this.prisma.users.findUnique({
+    return this.prisma.users.findFirst({
       where: { id, deletedAt: null },
     });
   }

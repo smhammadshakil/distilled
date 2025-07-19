@@ -10,7 +10,7 @@ async function bootstrap() {
     .setTitle('Distilled API')
     .setDescription('Distilled API description')
     .setVersion('1.0')
-    .addTag('distilled')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

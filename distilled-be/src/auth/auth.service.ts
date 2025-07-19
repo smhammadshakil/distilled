@@ -38,8 +38,8 @@ export class AuthService {
     if (!user) throw new UnauthorizedException('Invalid credentials');
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) throw new UnauthorizedException('Invalid credentials');
-    if (!user.isEmailVerified)
-      throw new UnauthorizedException('Email not verified');
+    // if (!user.isEmailVerified)
+    //   throw new UnauthorizedException('Email not verified');
     const payload = { sub: user.id, email: user.email };
     return { access_token: this.jwtService.sign(payload) };
   }

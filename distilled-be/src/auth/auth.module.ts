@@ -14,7 +14,7 @@ export const jwtSecret = 'superjwtsecretpassword';
     PassportModule,
     JwtModule.register({
       secret: jwtSecret, // Use env variable!
-      signOptions: { expiresIn: '2m' },
+      signOptions: { expiresIn: '1d' },
     }),
     UsersModule,
   ],
