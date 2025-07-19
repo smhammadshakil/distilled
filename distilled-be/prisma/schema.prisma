@@ -16,11 +16,6 @@ enum UserType {
   ADMIN
 }
 
-enum Deactivated {
-  SIGNUP
-  ACTIVE
-  INACTIVE
-}
 
 enum Gender {
   MALE
@@ -72,7 +67,9 @@ model Users {
   phoneNumber    String?
   website        String?
   shortIntro     String?
-  deactivated    Deactivated
+  activated      Boolean  @default(false)
+  isEmailVerified Boolean  @default(false)
+  emailVerificationToken String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   deletedAt      DateTime?
