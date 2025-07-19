@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
@@ -32,8 +33,12 @@ export class SkillsController {
 
   @Get(':id')
   @ApiOkResponse({ type: SkillEntity })
-  findOne(@Param('id') id: string) {
-    return this.skillsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const skill = await this.skillsService.findOne(id);
+    if (!skill) {
+      throw new NotFoundException(`Skill with id '${id}' does not exist`);
+    }
+    return skill;
   }
 
   @Patch(':id')
