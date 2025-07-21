@@ -28,9 +28,9 @@ export class AuthService {
         emailVerificationToken: Math.random().toString(36).substring(2), // Use a better token in prod!
       },
     });
-    console.log('new user', user);
     // TODO: Send verification email with the token
-    return { message: 'User created. Please verify your email.' };
+    const payload = { sub: user.id, email: user.email };
+    return { access_token: this.jwtService.sign(payload) };
   }
 
   async signIn(email: string, password: string) {
@@ -38,8 +38,8 @@ export class AuthService {
     if (!user) throw new UnauthorizedException('Invalid credentials');
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) throw new UnauthorizedException('Invalid credentials');
-    // if (!user.isEmailVerified)
-    //   throw new UnauthorizedException('Email not verified');
+    if (!user.isEmailVerified)
+      throw new UnauthorizedException('Email not verified');
     const payload = { sub: user.id, email: user.email };
     return { access_token: this.jwtService.sign(payload) };
   }
@@ -53,6 +53,7 @@ export class AuthService {
       where: { id: user.id },
       data: { isEmailVerified: true, emailVerificationToken: null },
     });
-    return { message: 'Email verified successfully.' };
+    const payload = { sub: user.id, email: user.email };
+    return { access_token: this.jwtService.sign(payload) };
   }
 }

@@ -8,6 +8,7 @@ import {
   Delete,
   NotFoundException,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,6 +21,17 @@ import {
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
+import { UpdateUserActivatedDto } from './dto/update-user-activated.dto';
+
+interface JwtUser {
+  id: string;
+  // add other fields if needed
+}
+
+interface AuthenticatedRequest extends Request {
+  user: JwtUser;
+}
 @Controller('users')
 @ApiTags('users')
 export class UsersController {
@@ -57,6 +69,33 @@ export class UsersController {
   @ApiOkResponse({ type: UserEntity })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @Patch(':id/update-password')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: UserEntity })
+  async updatePassword(
+    @Req() req: AuthenticatedRequest,
+    @Body() updateUserPasswordDto: UpdateUserPasswordDto,
+  ) {
+    const id: string = req.user.id;
+    return this.usersService.updatePassword(
+      id,
+      updateUserPasswordDto.oldPassword,
+      updateUserPasswordDto.newPassword,
+    );
+  }
+
+  @Patch(':id/activate')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: UserEntity })
+  async setActivated(
+    @Param('id') id: string,
+    @Body() updateUserActivatedDto: UpdateUserActivatedDto,
+  ) {
+    return this.usersService.setActivated(id, updateUserActivatedDto.activated);
   }
 
   @Delete(':id')
