@@ -30,8 +30,8 @@ export class AuthController {
 
   @Post('signup')
   @ApiOkResponse({ type: AuthEntity })
-  signUp(@Body() { email, password }: SignInDto) {
-    return this.authService.signUp(email, password);
+  signUp(@Body() { email, password, userType }: SignInDto) {
+    return this.authService.signUp(email, password, userType);
   }
 
   @Post('signin')

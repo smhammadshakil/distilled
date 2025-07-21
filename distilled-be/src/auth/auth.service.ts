@@ -7,6 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
+import { UserType } from '../../generated/prisma';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
-  async signUp(email: string, password: string) {
+  async signUp(email: string, password: string, userType: UserType) {
     const existing = await this.prisma.users.findUnique({ where: { email } });
     if (existing) throw new BadRequestException('Email already in use');
     const hash = await bcrypt.hash(password, 10);
@@ -24,17 +25,43 @@ export class AuthService {
         email,
         password: hash,
         isEmailVerified: false,
-        userType: 'TALENT',
+        userType,
         activated: false,
       },
     });
-    // TODO: Send verification email with the token
+
+    if (userType === 'ADMIN') {
+      await this.prisma.admins.create({
+        data: {
+          userId: user.id,
+          fullName: '',
+        },
+      });
+    } else if (userType === 'TALENT') {
+      await this.prisma.talents.create({
+        data: {
+          userId: user.id,
+          fullName: '',
+          status: 'BENCH',
+        },
+      });
+    } else if (userType === 'PARTNER') {
+      await this.prisma.partners.create({
+        data: {
+          userId: user.id,
+          companyName: '',
+          contactPersonName: '',
+        },
+      });
+    }
+    // Generate and save email verification token
     const jwtPayload = { sub: user.id, email: user.email };
     const token = this.jwtService.sign(jwtPayload);
     await this.prisma.users.update({
       where: { id: user.id },
       data: { emailVerificationToken: token },
     });
+
     return { access_token: token };
   }
 
