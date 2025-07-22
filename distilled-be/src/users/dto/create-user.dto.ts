@@ -5,7 +5,7 @@ import {
   IsString,
   IsStrongPassword,
 } from 'class-validator';
-import { UserType } from '../../../generated/prisma';
+import { UserType } from '../../../generated/prisma/index.js';
 export class CreateUserDto {
   @IsNotEmpty()
   @IsString()

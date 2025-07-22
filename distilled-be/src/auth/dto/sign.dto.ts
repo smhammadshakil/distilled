@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsEmail, MinLength } from 'class-validator';
-import { UserType } from '../../../generated/prisma';
+import { UserType } from '../../../generated/prisma/index.js';
 
 export class SignInDto {
   @IsNotEmpty()

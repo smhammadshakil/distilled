@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MaxLength, IsNotEmpty, IsString } from 'class-validator';
-import { Gender } from '../../../generated/prisma';
+import { Gender } from '../../../generated/prisma/index.js';
 
 export class CreateAdminDto {
   @IsNotEmpty()

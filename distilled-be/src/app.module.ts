@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PrismaModule } from './prisma/prisma.module';
-import { UsersModule } from './users/users.module';
-import { SkillsModule } from './skills/skills.module';
-import { RolesModule } from './roles/roles.module';
-import { AuthModule } from './auth/auth.module';
-import { TalentsModule } from './talents/talents.module';
-import { PartnersModule } from './partners/partners.module';
-import { AdminsModule } from './admins/admins.module';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
+import { PrismaModule } from './prisma/prisma.module.js';
+import { UsersModule } from './users/users.module.js';
+import { SkillsModule } from './skills/skills.module.js';
+import { RolesModule } from './roles/roles.module.js';
+import { AuthModule } from './auth/auth.module.js';
+import { TalentsModule } from './talents/talents.module.js';
+import { PartnersModule } from './partners/partners.module.js';
+import { AdminsModule } from './admins/admins.module.js';
+import { AdminModule } from './admin/admin.module.js';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AdminsModule } from './admins/admins.module';
     TalentsModule,
     PartnersModule,
     AdminsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

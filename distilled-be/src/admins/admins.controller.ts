@@ -8,17 +8,17 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { AdminsService } from './admins.service';
-import { CreateAdminDto } from './dto/create-admin.dto';
-import { UpdateAdminDto } from './dto/update-admin.dto';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { AdminsService } from './admins.service.js';
+import { CreateAdminDto } from './dto/create-admin.dto.js';
+import { UpdateAdminDto } from './dto/update-admin.dto.js';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard.js';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { AdminEntity } from './entities/admin.entity';
+import { AdminEntity } from './entities/admin.entity.js';
 
 @Controller('admins')
 @ApiTags('admins')

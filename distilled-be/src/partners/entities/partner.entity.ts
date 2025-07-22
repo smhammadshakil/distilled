@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Gender, Partners, UserType } from '../../../generated/prisma';
+import { Gender, Partners, UserType } from '../../../generated/prisma/index.js';
 
 export class PartnerEntity implements Partners {
   @ApiProperty()

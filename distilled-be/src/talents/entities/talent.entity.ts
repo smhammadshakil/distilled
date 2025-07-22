@@ -4,7 +4,7 @@ import {
   Gender,
   UserType,
   TalentStatus,
-} from '../../../generated/prisma';
+} from '../../../generated/prisma/index.js';
 
 export class TalentEntity implements Talents {
   @ApiProperty()

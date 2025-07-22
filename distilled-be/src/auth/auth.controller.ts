@@ -7,14 +7,14 @@ import {
   UseGuards,
   Get,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService } from './auth.service.js';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { AuthEntity } from './entities/auth.entity';
-import { SignInDto } from './dto/sign.dto';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-import { ForgotPasswordDto } from './dto/forgot-password.dto';
-import { MessageEntity } from './entities/message.entity';
-import { JwtAuthGuard } from './jwt.auth.guard';
+import { AuthEntity } from './entities/auth.entity.js';
+import { SignInDto } from './dto/sign.dto.js';
+import { ResetPasswordDto } from './dto/reset-password.dto.js';
+import { ForgotPasswordDto } from './dto/forgot-password.dto.js';
+import { MessageEntity } from './entities/message.entity.js';
+import { JwtAuthGuard } from './jwt.auth.guard.js';
 interface JwtUser {
   id: string;
   // add other fields if needed

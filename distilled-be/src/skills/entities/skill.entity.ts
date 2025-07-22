@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Skills } from '../../../generated/prisma';
+import { Skills } from '../../../generated/prisma/index.js';
 
 export class SkillEntity implements Skills {
   @ApiProperty()

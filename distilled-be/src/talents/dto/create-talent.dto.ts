@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MaxLength, IsNotEmpty, IsString, IsNumber } from 'class-validator';
-import { Gender, TalentStatus } from '../../../generated/prisma';
+import { Gender, TalentStatus } from '../../../generated/prisma/index.js';
 
 export class CreateTalentDto {
   @IsNotEmpty()

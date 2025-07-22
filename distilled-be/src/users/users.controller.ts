@@ -10,19 +10,19 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersService } from './users.service.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { UserEntity } from './entities/user.entity';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
-import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
-import { UpdateUserActivatedDto } from './dto/update-user-activated.dto';
+import { UserEntity } from './entities/user.entity.js';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard.js';
+import { UpdateUserPasswordDto } from './dto/update-user-password.dto.js';
+import { UpdateUserActivatedDto } from './dto/update-user-activated.dto.js';
 
 interface JwtUser {
   id: string;

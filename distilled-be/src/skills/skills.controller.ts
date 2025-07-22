@@ -8,11 +8,11 @@ import {
   Delete,
   NotFoundException,
 } from '@nestjs/common';
-import { SkillsService } from './skills.service';
-import { CreateSkillDto } from './dto/create-skill.dto';
-import { UpdateSkillDto } from './dto/update-skill.dto';
+import { SkillsService } from './skills.service.js';
+import { CreateSkillDto } from './dto/create-skill.dto.js';
+import { UpdateSkillDto } from './dto/update-skill.dto.js';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { SkillEntity } from './entities/skill.entity';
+import { SkillEntity } from './entities/skill.entity.js';
 
 @Controller('skills')
 @ApiTags('skills')

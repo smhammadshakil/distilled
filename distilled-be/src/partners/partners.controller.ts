@@ -8,11 +8,11 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { PartnersService } from './partners.service';
-import { CreatePartnerDto } from './dto/create-partner.dto';
-import { UpdatePartnerDto } from './dto/update-partner.dto';
-import { PartnerEntity } from './entities/partner.entity';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { PartnersService } from './partners.service.js';
+import { CreatePartnerDto } from './dto/create-partner.dto.js';
+import { UpdatePartnerDto } from './dto/update-partner.dto.js';
+import { PartnerEntity } from './entities/partner.entity.js';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard.js';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,

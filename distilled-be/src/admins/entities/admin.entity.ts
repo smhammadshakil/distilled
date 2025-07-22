@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Admins, Gender, UserType } from '../../../generated/prisma';
+import { Admins, Gender, UserType } from '../../../generated/prisma/index.js';
 
 export class AdminEntity implements Admins {
   @ApiProperty()

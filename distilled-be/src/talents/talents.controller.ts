@@ -8,17 +8,17 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { TalentsService } from './talents.service';
-import { CreateTalentDto } from './dto/create-talent.dto';
-import { UpdateTalentDto } from './dto/update-talent.dto';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { TalentsService } from './talents.service.js';
+import { CreateTalentDto } from './dto/create-talent.dto.js';
+import { UpdateTalentDto } from './dto/update-talent.dto.js';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard.js';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { TalentEntity } from './entities/talent.entity';
+import { TalentEntity } from './entities/talent.entity.js';
 
 @Controller('talents')
 @ApiTags('talents')

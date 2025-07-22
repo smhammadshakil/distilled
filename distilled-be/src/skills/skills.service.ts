@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSkillDto } from './dto/create-skill.dto';
-import { UpdateSkillDto } from './dto/update-skill.dto';
-import { PrismaService } from '../prisma/prisma.service';
+import { CreateSkillDto } from './dto/create-skill.dto.js';
+import { UpdateSkillDto } from './dto/update-skill.dto.js';
+import { PrismaService } from '../prisma/prisma.service.js';
 
 @Injectable()
 export class SkillsService {
