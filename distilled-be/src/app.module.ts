@@ -13,6 +13,7 @@ import { AdminModule } from './admin/admin.module.js';
 
 @Module({
   imports: [
+    AdminModule,
     PrismaModule,
     UsersModule,
     SkillsModule,
@@ -21,7 +22,6 @@ import { AdminModule } from './admin/admin.module.js';
     TalentsModule,
     PartnersModule,
     AdminsModule,
-    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
