@@ -9,6 +9,12 @@ import { AuthModule } from './auth/auth.module';
 import { TalentsModule } from './talents/talents.module';
 import { PartnersModule } from './partners/partners.module';
 import { AdminsModule } from './admins/admins.module';
+import { ResumesModule } from './resumes/resumes.module';
+import { ExperiencesModule } from './experiences/experiences.module';
+import { CertificationsModule } from './certifications/certifications.module';
+import { ApplicationsModule } from './applications/applications.module';
+import { LeadsModule } from './leads/leads.module';
+import { ActiveRequestsModule } from './active-requests/active-requests.module';
 
 @Module({
   imports: [
@@ -20,6 +26,12 @@ import { AdminsModule } from './admins/admins.module';
     TalentsModule,
     PartnersModule,
     AdminsModule,
+    ResumesModule,
+    ExperiencesModule,
+    CertificationsModule,
+    ApplicationsModule,
+    LeadsModule,
+    ActiveRequestsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

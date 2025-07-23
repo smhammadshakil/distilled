@@ -55,7 +55,7 @@ export class AuthService {
       });
     }
     // Generate and save email verification token
-    const jwtPayload = { sub: user.id, email: user.email };
+    const jwtPayload = { id: user.id, email: user.email };
     const token = this.jwtService.sign(jwtPayload);
     await this.prisma.users.update({
       where: { id: user.id },
@@ -72,8 +72,12 @@ export class AuthService {
     if (!valid) throw new UnauthorizedException('Invalid credentials');
     if (!user.isEmailVerified)
       throw new UnauthorizedException('Email not verified');
-    const jwtPayload = { sub: user.id, email: user.email };
-    return { access_token: this.jwtService.sign(jwtPayload) };
+    const jwtPayload = { id: user.id, email: user.email };
+    return {
+      access_token: this.jwtService.sign(jwtPayload),
+      email: user.email,
+      id: user.id,
+    };
   }
 
   async verifyEmail(token: string) {
@@ -92,7 +96,7 @@ export class AuthService {
       where: { id: user.id },
       data: { isEmailVerified: true, emailVerificationToken: null },
     });
-    const jwtPayload = { sub: user.id, email: user.email };
+    const jwtPayload = { id: user.id, email: user.email };
     return { access_token: this.jwtService.sign(jwtPayload) };
   }
 
@@ -134,7 +138,7 @@ export class AuthService {
     const user = await this.prisma.users.findUnique({ where: { id } });
     if (!user) throw new NotFoundException('User not found');
     // TODO: Send verification email with the token
-    const jwtPayload = { sub: user.id, email: user.email };
+    const jwtPayload = { id: user.id, email: user.email };
     const token = this.jwtService.sign(jwtPayload);
     await this.prisma.users.update({
       where: { id: user.id },
