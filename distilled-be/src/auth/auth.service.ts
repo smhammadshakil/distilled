@@ -20,49 +20,65 @@ export class AuthService {
     const existing = await this.prisma.users.findUnique({ where: { email } });
     if (existing) throw new BadRequestException('Email already in use');
     const hash = await bcrypt.hash(password, 10);
-    const user = await this.prisma.users.create({
-      data: {
-        email,
-        password: hash,
-        isEmailVerified: false,
-        userType,
-        activated: false,
-      },
-    });
+    return this.prisma.$transaction(async (tx) => {
+      const user = await tx.users.create({
+        data: {
+          email,
+          password: hash,
+          isEmailVerified: false,
+          userType,
+          activated: false,
+        },
+      });
 
-    if (userType === 'ADMIN') {
-      await this.prisma.admins.create({
-        data: {
-          userId: user.id,
-          fullName: '',
-        },
-      });
-    } else if (userType === 'TALENT') {
-      await this.prisma.talents.create({
-        data: {
-          userId: user.id,
-          fullName: '',
-          status: 'BENCH',
-        },
-      });
-    } else if (userType === 'PARTNER') {
-      await this.prisma.partners.create({
-        data: {
-          userId: user.id,
-          companyName: '',
-          contactPersonName: '',
-        },
-      });
-    }
-    // Generate and save email verification token
-    const jwtPayload = { id: user.id, email: user.email };
-    const token = this.jwtService.sign(jwtPayload);
-    await this.prisma.users.update({
-      where: { id: user.id },
-      data: { emailVerificationToken: token },
-    });
+      let profile: any = {};
 
-    return { access_token: token };
+      if (userType === 'ADMIN') {
+        profile = await tx.admins.create({
+          data: {
+            userId: user.id,
+            fullName: '',
+          },
+        });
+      } else if (userType === 'TALENT') {
+        profile = await tx.talents.create({
+          data: {
+            userId: user.id,
+            fullName: '',
+            status: 'BENCH',
+          },
+        });
+      } else if (userType === 'PARTNER') {
+        const partner = await tx.partners.create({
+          data: {
+            userId: user.id,
+            companyName: '',
+            contactPersonName: '',
+          },
+        });
+        // Create an initial lead for the partner
+        await tx.leads.create({
+          data: {
+            partnerId: partner.id,
+            startDate: new Date(),
+            status: 'LEAD',
+          },
+        });
+        profile = partner;
+      } else {
+        throw new BadRequestException('Invalid user type');
+      }
+
+      // Generate and save email verification token
+      const jwtPayload = { id: user.id, email: user.email };
+      const token = this.jwtService.sign(jwtPayload);
+      await tx.users.update({
+        where: { id: user.id },
+        data: { emailVerificationToken: token },
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      return { access_token: token, user, profile };
+    });
   }
 
   async signIn(email: string, password: string) {

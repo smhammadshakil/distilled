@@ -8,14 +8,12 @@ export class ExperiencesService {
   constructor(private prisma: PrismaService) {}
   async create(id: string, createExperienceDto: CreateExperienceDto) {
     const { skills, roles, ...rest } = createExperienceDto;
-    console.log('idd', id);
     const talent = await this.prisma.talents.findUnique({
       where: { userId: id },
     });
     if (!talent) {
       throw new Error('Talent not found for the given user ID');
     }
-    console.log('talent', talent);
     return this.prisma.experiences.create({
       data: {
         ...rest,

@@ -13,8 +13,13 @@ import { ExperiencesService } from './experiences.service';
 import { CreateExperienceDto } from './dto/create-experience.dto';
 import { UpdateExperienceDto } from './dto/update-experience.dto';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { ExperienceEntity } from './entities/experience.entity';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 interface JwtUser {
   id: string;
@@ -43,16 +48,25 @@ export class ExperiencesController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: ExperienceEntity, isArray: true })
   findAll() {
     return this.experiencesService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: ExperienceEntity })
   findOne(@Param('id') id: string) {
     return this.experiencesService.findOne(id);
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: ExperienceEntity })
   update(
     @Param('id') id: string,
     @Body() updateExperienceDto: UpdateExperienceDto,
@@ -61,6 +75,9 @@ export class ExperiencesController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: ExperienceEntity })
   remove(@Param('id') id: string) {
     return this.experiencesService.remove(id);
   }

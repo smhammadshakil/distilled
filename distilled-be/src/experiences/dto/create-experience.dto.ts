@@ -20,7 +20,7 @@ export class CreateExperienceDto {
   @IsNotEmpty()
   @IsDateString()
   @ApiProperty({ type: String, format: 'date-time' })
-  startDate: string;
+  startDate: Date;
 
   @IsOptional()
   @IsDateString()
